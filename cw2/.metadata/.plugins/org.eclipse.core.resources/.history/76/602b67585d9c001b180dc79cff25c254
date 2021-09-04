@@ -1,0 +1,306 @@
+package cw2;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.TableModel;
+
+public class Home {
+	
+	public static void main(String[] args) {
+		new Home();
+	}
+	
+	Home(){
+		
+		DBConnect conn = new DBConnect();
+		
+		JFrame frame = new JFrame();
+		
+		JLabel title,namelbl, publisherlbl, datelbl, quantitylbl, pricelbl, searchlbl, sortlbl;
+		JTextField searchInput, nameinp, publisherinp, dateinp, quantityinp, priceinp;
+		JButton searchBtn, addBtn, editBtn, deleteBtn, updateBtn, sortBtn;
+		JTable table;
+		JComboBox search_dropdown, sort_dropdown;
+				
+		title = new JLabel("BookStore Management System", JLabel.CENTER);
+		title.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		title.setBounds(0, 0, 1200, 40);
+		
+		namelbl = new JLabel("Name :");
+		namelbl.setBounds(1050, 180, 100, 30);
+		nameinp = new JTextField();
+		nameinp.setBounds(1050, 210, 250, 30);
+		
+		publisherlbl = new JLabel("Publisher :");
+		publisherlbl.setBounds(1050, 250, 100, 30);
+		publisherinp = new JTextField();
+		publisherinp.setBounds(1050, 280, 250, 30);
+		
+		datelbl = new JLabel("Date :");
+		datelbl.setBounds(1050, 320, 100, 30);
+		dateinp = new JTextField();
+		dateinp.setBounds(1050, 350, 250, 30);
+		
+		quantitylbl = new JLabel("Quantity :");
+		quantitylbl.setBounds(1050, 390, 100, 30);
+		quantityinp = new JTextField();
+		quantityinp.setBounds(1050, 420, 250, 30);
+		
+		pricelbl = new JLabel("Price :");
+		pricelbl.setBounds(1050, 460, 100, 30);
+		priceinp = new JTextField();
+		priceinp.setBounds(1050, 490, 250, 30);
+		
+		sortlbl = new JLabel("Sort by");
+        sortlbl.setBounds(100, 80, 100, 30);
+        
+        String category[] = {"Ascending", "Decending"};
+        sort_dropdown = new JComboBox(category);
+        sort_dropdown.setBounds(200, 80, 150, 30);
+		
+		sortBtn = new JButton("Sort");
+		sortBtn.setBounds(370, 80, 100, 30);
+		
+		searchlbl = new JLabel("Search by");
+        searchlbl.setBounds(740, 80, 100, 30);
+        
+        String types[] = {"Book Name", "Publisher", "Published Date"};
+        search_dropdown = new JComboBox(types);
+        search_dropdown.setBounds(840, 80, 150, 30);
+		
+		searchInput = new JTextField();
+		searchInput.setBounds(1000, 80, 170, 30);
+		
+		searchBtn = new JButton("Search");
+		searchBtn.setBounds(1170, 80, 100, 30);
+		
+		addBtn = new JButton("Add");
+		addBtn.setBounds(1025, 540, 200, 30);
+		
+		updateBtn = new JButton("Update");
+		updateBtn.setEnabled(false);
+		updateBtn.setBounds(1025, 580, 200, 30);
+		
+		editBtn = new JButton("Edit");
+		editBtn.setBounds(550, 650, 100, 30);
+		
+		deleteBtn = new JButton("Delete");
+		deleteBtn.setBounds(700, 650, 100, 30);
+		
+		// add functionality
+		addBtn.addActionListener(e -> {
+			int book_price, book_quantity;
+			String name, publisher;
+			String book_date;
+									
+			name = nameinp.getText();
+			book_date = dateinp.getText();
+			publisher = publisherinp.getText();
+			book_price = Integer.parseInt(priceinp.getText());
+			book_quantity = Integer.parseInt(quantityinp.getText());
+						
+			boolean result = addBook(name, book_date, publisher, book_price, book_quantity);
+			
+			if (result == true) {
+				frame.dispose();
+				new Home();
+			}
+			else {
+				JOptionPane.showMessageDialog(frame, "Could not add book");
+			}
+			
+		});
+		
+		
+		// table
+		
+		String query = "select * from Book;";
+		
+		ArrayList<Book> sft = new ArrayList<Book>();
+		
+		try {
+			ResultSet rs = conn.connection().createStatement().executeQuery(query);
+			while(rs.next()) {
+				String name = rs.getString("name");
+				String publisher = rs.getString("publisher");
+				Date publish_date = rs.getDate("publish_date");
+				int price = rs.getInt("price");	
+				int quantity = rs.getInt("quantity");
+				
+				Book st = new Book(name, publisher, publish_date, price, quantity);
+				sft.add(st);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String column[] = {"Name", "Publisher", "Published Date", "Price", "Quantity"};		
+		Object data[][] = new Object[sft.size()][column.length]; 
+
+		for(int i=0; i<sft.size(); i++) {
+			data[i][0] = sft.get(i).name;
+			data[i][1] = sft.get(i).publisher;
+			data[i][2] = sft.get(i).publish_date;
+			data[i][3] = sft.get(i).price;
+			data[i][4] = sft.get(i).quantity;
+		}
+			
+		table = new JTable(data, column);
+		table.setBounds(190, 180, 800, 450);
+		JScrollPane sp = new JScrollPane(table);
+		
+		// delete functionality
+		deleteBtn.addActionListener(e->{
+			
+            int row = table.getSelectedRow();
+            if(row>=0) {
+                
+            	TableModel model = table.getModel();
+            	String name = (String) model.getValueAt(row, 0);
+            	
+            	boolean result = deleteBook(name);
+            	
+            	if (result == true) {
+            		frame.dispose();
+            		new Home();
+            		JOptionPane.showMessageDialog(frame, "Book deleted");
+            	}
+            	else {
+            		JOptionPane.showMessageDialog(frame, "Book not deleted");
+            	}
+            	
+            	
+            }else {
+                JOptionPane.showMessageDialog(frame, "Please select row");
+            }           
+        });
+		
+		//edit functionality
+		editBtn.addActionListener(e -> {
+			
+			int row = table.getSelectedRow();
+			if(row >= 0) {
+				TableModel model = table.getModel();
+            	
+            	String name = (String) model.getValueAt(row, 0);
+            	String date = dateinp.getText();
+    			String publisher = publisherinp.getText();
+    			int price = Integer.parseInt(priceinp.getText());
+    			int quantity = Integer.parseInt(quantityinp.getText());
+    			
+    			nameinp.setText(name);
+            	            	
+
+			}
+			else {
+				JOptionPane.showMessageDialog(frame, "Please select row");
+			}
+			
+		});
+		
+		frame.add(sp);
+		frame.add(table);
+		frame.add(title);
+		frame.add(namelbl);
+		frame.add(nameinp);
+		frame.add(publisherlbl);
+		frame.add(publisherinp);
+		frame.add(datelbl);
+		frame.add(dateinp);
+		frame.add(quantitylbl);
+		frame.add(quantityinp);
+		frame.add(pricelbl);
+		frame.add(priceinp);
+		frame.add(searchInput);
+		frame.add(searchBtn);
+		frame.add(addBtn);
+		frame.add(updateBtn);
+		frame.add(editBtn);
+		frame.add(deleteBtn);
+		frame.add(searchlbl);
+		frame.add(search_dropdown);
+		frame.add(sort_dropdown);
+		frame.add(sortBtn);
+		frame.add(sortlbl);
+		
+		frame.setSize(1400, 800);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+	}
+	
+	// add function
+	public boolean addBook(String name, String publisher, String date, int price, int quantity) {
+		DBConnect conn = new DBConnect();
+		PreparedStatement stmt;
+		try {
+			stmt = (PreparedStatement) conn.connection().prepareStatement("insert into Book values (null, ?, ?, ?, ?, ?)");
+			stmt.setString(1, name);
+			stmt.setString(2, publisher);
+			stmt.setInt(3, price);
+			stmt.setString(4, date); 
+			stmt.setInt(5, quantity);
+			stmt.executeUpdate();
+			return true;	
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}			
+		return false;
+	}
+	
+	// delete function
+	public boolean deleteBook(String name) {
+		DBConnect conn = new DBConnect();
+		PreparedStatement stmt;
+    	String dquery = "delete from Book where name=?";
+    	try {
+			stmt = (PreparedStatement) conn.connection().prepareStatement(dquery);
+			stmt.setString(1, name);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return false;
+	}
+	
+	// edit function
+	public boolean updateBook(String name, String publisher, String date, int price, int quantity) {
+		DBConnect conn = new DBConnect();
+		PreparedStatement stmt;
+    	String update_query = "update Book set publisher=?, publish_date=?, price=?, quantity=? where name=?";
+    	try {
+			stmt = (PreparedStatement) conn.connection().prepareStatement(update_query);
+			stmt.setString(1, publisher);
+			stmt.setString(2, date);
+			stmt.setInt(3, price);
+			stmt.setInt(4, quantity);
+			stmt.setString(5, name);
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}	
+		return false;
+	}
+	
+	
+}

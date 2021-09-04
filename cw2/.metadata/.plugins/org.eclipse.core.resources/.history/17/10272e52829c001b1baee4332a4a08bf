@@ -1,0 +1,30 @@
+package cw2;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+
+public class SoldBook {
+	
+	public static void main(String[] args) {
+		new SoldBook();
+	}
+	
+	SoldBook(){
+		
+		JFrame frame = new JFrame();
+		
+		JLabel title;
+		JTable table;
+		
+		title = new JLabel("Sold Books");
+		title.setBounds(300, 20, 150, 30);
+		
+		
+		frame.setSize(800, 600);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+	}
+	
+}

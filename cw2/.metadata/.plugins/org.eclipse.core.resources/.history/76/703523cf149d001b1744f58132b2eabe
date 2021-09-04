@@ -1,0 +1,16 @@
+package cw2;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class ConnectionTest {
+
+	@Test
+	void test() {
+		DBConnect conn = new DBConnect();
+		conn.connection();
+		assertEquals(null, null);
+	}
+
+}

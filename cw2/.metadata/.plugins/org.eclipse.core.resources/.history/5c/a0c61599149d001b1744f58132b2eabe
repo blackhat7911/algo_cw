@@ -1,0 +1,15 @@
+package cw2;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class SearchTest {
+
+	@Test
+	void test() {
+		Search search = new Search();
+		search.searchString(data, searched, index, value);
+	}
+
+}

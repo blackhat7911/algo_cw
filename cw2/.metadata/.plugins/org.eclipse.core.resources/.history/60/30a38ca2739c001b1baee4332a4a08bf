@@ -1,0 +1,19 @@
+package cw2;
+
+import java.sql.Date;
+
+public class Book {
+	
+	int price, quantity ;
+	String name, publisher;
+	Date publish_date;
+	
+	Book(String name, String publisher, Date publish_date, int price, int quantity){
+		this.name = name;
+		this.publisher = publisher;
+		this.publish_date = publish_date;
+		this.price = price;
+		this.quantity = quantity;
+	}
+	
+}

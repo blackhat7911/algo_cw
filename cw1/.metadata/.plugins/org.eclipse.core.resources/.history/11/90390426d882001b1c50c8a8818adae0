@@ -1,0 +1,19 @@
+package week7;
+
+public class JarvisAlgo {
+	
+	// finding orientation
+	int orientation(Points p, Points q, Points r) {
+		int val = ((q.y - p.y) * (r.x - q.x)) - ((q.x - p.x) * (r.y - q.y));
+		return val;
+	}
+	
+	public static void main(String[] args) {
+		JarvisAlgo jar = new JarvisAlgo();
+		Points p = new Points(0,0);
+		Points q = new Points(3,0);
+		Points r = new Points(6,0);
+		System.out.println(jar.orientation(p, q, r));
+	}
+	
+}

@@ -1,0 +1,150 @@
+package cw2;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class UpdateForm {
+	
+	UpdateForm(){
+		
+		JFrame frame = new JFrame();
+		
+		JLabel title, bookid, bookname, publisher, pub_date, price, quantity;
+		JTextField idInp, nameInp, pubInp, priceInp, quantityInp;
+		JButton addBtn, cancelBtn;
+		DateFormat dateformat;
+		JFormattedTextField dateInp;
+		
+		title = new JLabel("BookStore Management System", JLabel.CENTER);
+		title.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		title.setBounds(0, 0, 1200, 40);
+		
+		bookid = new JLabel("Book ID");
+		title.setFont(new Font("Poppins", Font.BOLD, 16));
+		bookid.setBounds(450, 150, 100, 30);
+		idInp = new JTextField();
+		idInp.setBounds(600, 150, 200, 30);
+		
+		bookname = new JLabel("Book Name");
+		title.setFont(new Font("Poppins", Font.BOLD, 16));
+		bookname.setBounds(450, 200, 100, 30);
+		nameInp = new JTextField();
+		nameInp.setBounds(600, 200, 200, 30);
+		
+		publisher = new JLabel("Publisher");
+		publisher.setFont(new Font("Poppins", Font.BOLD, 16));
+		publisher.setBounds(450, 250, 100, 30);
+		pubInp = new JTextField();
+		pubInp.setBounds(600, 250, 200, 30);
+		
+		pub_date = new JLabel("Date");
+		pub_date.setFont(new Font("Poppins", Font.BOLD, 16));
+		pub_date.setBounds(450, 300, 100, 30);
+		dateformat = new SimpleDateFormat("dd mmm yyyy");
+		dateInp = new JFormattedTextField();
+		dateInp.setBounds(600, 300, 200, 30);
+		
+		price = new JLabel("Price");
+		price.setFont(new Font("Poppins", Font.BOLD, 16));
+		price.setBounds(450, 350, 100, 30);
+		priceInp = new JTextField();
+		priceInp.setBounds(600, 350, 200, 30);
+		
+		quantity = new JLabel("Quantity");
+		quantity.setFont(new Font("Poppins", Font.BOLD, 16));
+		quantity.setBounds(450, 400, 100, 30);
+		quantityInp = new JTextField();
+		quantityInp.setBounds(600, 400, 200, 30);
+		
+		cancelBtn = new JButton("Cancel");
+		cancelBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		cancelBtn.setBackground(Color.RED);
+		cancelBtn.setForeground(Color.WHITE);
+		cancelBtn.setBounds(450, 450, 100, 30);
+		
+		addBtn = new JButton("Save");
+		addBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		addBtn.setBackground(Color.GREEN);
+		addBtn.setForeground(Color.WHITE);
+		addBtn.setBounds(700, 450, 100, 30);
+		
+		cancelBtn.addActionListener(e -> {
+			frame.dispose();
+			new Home();
+		});
+		
+		addBtn.addActionListener(e -> {
+			
+			int book_id, publisher_id, book_price, book_quantity;
+			String name;
+			String book_date;
+						
+			PreparedStatement stmt;
+			
+			book_id = Integer.parseInt(idInp.getText());
+			name = nameInp.getText();
+			book_date = dateInp.getText();
+			publisher_id = Integer.parseInt(pubInp.getText());
+			book_price = Integer.parseInt(priceInp.getText());
+			book_quantity = Integer.parseInt(quantityInp.getText());
+			
+			DBConnect conn = new DBConnect();
+			
+			try {
+				stmt = (PreparedStatement) conn.connection().prepareStatement("update Book set name='?', price=?, pub_date='?', publisher_id=?, quantity=? where book_id=? ");
+				stmt.setString(1, name);
+				stmt.setInt(2, book_price);
+				stmt.setInt(3, publisher_id);
+				stmt.setString(4, book_date);
+				stmt.setInt(5, book_quantity);
+				stmt.setInt(6, book_id);
+				stmt.executeUpdate();
+                JOptionPane.showMessageDialog(frame, "Book Updated");
+                
+//                idInp.setText("");
+//                nameInp.setText("");
+//                dateInp.setText("");
+//                pubInp.setText("");
+//                priceInp.setText("");
+//                quantityInp.setText("");
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(frame, "Couldn't add");
+			}			
+		});
+				
+		frame.add(title);
+		frame.add(bookid);
+		frame.add(idInp);
+		frame.add(bookname);
+		frame.add(nameInp);
+		frame.add(publisher);
+		frame.add(pubInp);
+		frame.add(pub_date);
+		frame.add(dateInp);
+		frame.add(quantity);
+		frame.add(quantityInp);
+		frame.add(price);
+		frame.add(priceInp);
+		frame.add(addBtn);
+		frame.add(cancelBtn);
+		
+		frame.setSize(1400, 800);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+	}
+	
+}

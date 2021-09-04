@@ -1,0 +1,22 @@
+package cw2;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class MergeSortTest {
+
+	@Test
+	void test() {
+		MergeSort ms = new MergeSort();
+		int arr[][] = {
+				{4, 5, 1, 0},
+				{4, 5, 1, 0},
+				{4, 5, 1, 0},
+				{4, 5, 1, 0}
+		};
+		int num = arr.length;
+		ms.sort(arr, 0, num-1, 1, "Ascending");
+	}
+
+}

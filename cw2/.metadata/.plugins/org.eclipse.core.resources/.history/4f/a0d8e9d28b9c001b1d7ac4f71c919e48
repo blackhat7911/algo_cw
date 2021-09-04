@@ -1,0 +1,15 @@
+package cw2;
+
+public class AvailableModel {
+	
+	int id, quantity;
+	String name, publisher;
+	
+	AvailableModel(int id, String name, String publisher, int quantity){
+		this.id = id;
+		this.name = name;
+		this.publisher = publisher;
+		this.quantity = quantity;
+	}
+	
+}

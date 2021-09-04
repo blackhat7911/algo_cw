@@ -1,0 +1,13 @@
+package cw2;
+
+public class SoldBook {
+	
+	public static void main(String[] args) {
+		new SoldBook();
+	}
+	
+	SoldBook(){
+		
+	}
+	
+}

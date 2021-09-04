@@ -1,0 +1,5 @@
+huawei,3006,Router
+samsung,0908,Router
+apple,9809,Router
+microsoft,3420,Switch
+ali,4243,Modem

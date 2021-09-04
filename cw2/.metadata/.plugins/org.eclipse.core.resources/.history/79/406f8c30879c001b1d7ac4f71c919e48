@@ -1,0 +1,13 @@
+package cw2;
+
+public class AvailableBook {
+
+	public static void main(String[] args) {
+		new AvailableBook();
+	}
+	
+	AvailableBook() {
+		
+	}
+	
+}

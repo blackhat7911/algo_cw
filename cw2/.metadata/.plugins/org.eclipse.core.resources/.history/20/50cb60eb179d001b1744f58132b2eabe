@@ -1,0 +1,29 @@
+package cw2;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class MergeSortTest {
+
+	@Test
+	void test() {
+		MergeSort ms = new MergeSort();
+		Object arr[][] = {
+				{4, "d"},
+				{1, "a"},
+				{2, "b"},
+		};
+		int num = arr.length;
+		ms.sort(arr, 0, num-1, 1, "Ascending");
+		Object actualOutput[][] = {
+				{0, 1, 4, 5},
+				{2, 5, 9, 10},
+				{0, 1, 6, 8},
+				{0, 4, 7, 9}
+		};
+		
+		assertEquals(expected, actualOutput);
+	}
+
+}

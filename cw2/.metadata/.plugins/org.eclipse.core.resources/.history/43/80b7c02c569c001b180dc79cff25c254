@@ -1,0 +1,266 @@
+package cw2;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.TableModel;
+
+public class Home {
+	
+	Home(){
+		
+		JFrame frame = new JFrame();
+		
+		JLabel title,namelbl, publisherlbl, datelbl, quantitylbl, pricelbl;
+		JTextField searchInput, nameinp, publisherinp, dateinp, quantityinp, priceinp;
+		JButton searchBtn, addBtn, editBtn, deleteBtn;
+		JTable table;
+		
+		DBConnect conn = new DBConnect();
+		
+		title = new JLabel("BookStore Management System", JLabel.CENTER);
+		title.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		title.setBounds(0, 0, 1200, 40);
+		
+		namelbl = new JLabel("Name :");
+		namelbl.setFont(new Font("Poppins", Font.PLAIN, 16));
+		namelbl.setBounds(1000, 180, 100, 30);
+		nameinp = new JTextField();
+		nameinp.setBounds(1000, 220, 120, 30);
+		
+		publisherlbl = new JLabel("Publisher :");
+		publisherlbl.setFont(new Font("Poppins", Font.PLAIN, 16));
+		publisherlbl.setBounds(1000, 260, 100, 30);
+		publisherinp = new JTextField();
+		publisherinp.setBounds(1000, 300, 120, 30);
+		
+		datelbl = new JLabel("Date :");
+		datelbl.setFont(new Font("Poppins", Font.PLAIN, 16));
+		datelbl.setBounds(1000, 150, 100, 30);
+		dateinp = new JTextField();
+		dateinp.setBounds(1000, 180, 120, 30);
+		
+		quantitylbl = new JLabel("Quantity :");
+		quantitylbl.setFont(new Font("Poppins", Font.PLAIN, 16));
+		quantitylbl.setBounds(1000, 150, 100, 30);
+		quantityinp = new JTextField();
+		quantityinp.setBounds(1000, 180, 120, 30);
+		
+		pricelbl = new JLabel("Price :");
+		pricelbl.setFont(new Font("Poppins", Font.PLAIN, 16));
+		pricelbl.setBounds(1000, 150, 100, 30);
+		priceinp = new JTextField();
+		priceinp.setBounds(1000, 180, 120, 30);
+		
+		searchInput = new JTextField();
+		searchInput.setBounds(1000, 80, 170, 30);
+		
+		searchBtn = new JButton("Search");
+		searchBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		searchBtn.setBounds(1170, 80, 100, 30);
+		
+		addBtn = new JButton("Add");
+		addBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		addBtn.setBackground(Color.GREEN);
+		addBtn.setForeground(Color.WHITE);
+		addBtn.setBounds(400, 120, 100, 30);
+		
+		editBtn = new JButton("Edit");
+		editBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		editBtn.setBackground(Color.YELLOW);
+		editBtn.setForeground(Color.WHITE);
+		editBtn.setBounds(550, 120, 100, 30);
+		
+		deleteBtn = new JButton("Delete");
+		deleteBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		deleteBtn.setBackground(Color.RED);
+		deleteBtn.setForeground(Color.WHITE);
+		deleteBtn.setBounds(700, 120, 100, 30);
+		
+		// add functionality
+		addBtn.addActionListener(e -> {
+			int book_price, book_quantity;
+			String name, publisher;
+			String book_date;
+						
+			PreparedStatement stmt;
+			
+			name = nameinp.getText();
+			book_date = dateinp.getText();
+			publisher = publisherinp.getText();
+			book_price = Integer.parseInt(priceinp.getText());
+			book_quantity = Integer.parseInt(quantityinp.getText());
+						
+			try {
+				stmt = (PreparedStatement) conn.connection().prepareStatement("insert into Book values (null, ?, ?, ?, ?, ?)");
+				stmt.setString(1, name);
+				stmt.setString(2, publisher);
+				stmt.setInt(3, book_price);
+				stmt.setString(4, book_date); 
+				stmt.setInt(5, book_quantity);
+				stmt.executeUpdate();
+                JOptionPane.showMessageDialog(frame, "Book Added");
+                
+                frame.dispose();
+                new Home();
+                
+                nameinp.setText("");
+                dateinp.setText("");
+                publisherinp.setText("");
+                priceinp.setText("");
+                quantityinp.setText("");    
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(frame, "Couldn't add");
+			}			
+		});
+		
+		
+		// table
+		
+		String query = "select * from Book;";
+		
+		ArrayList<Book> sft = new ArrayList<Book>();
+		
+		try {
+			ResultSet rs = conn.connection().createStatement().executeQuery(query);
+			while(rs.next()) {
+				String name = rs.getString("name");
+				String publisher = rs.getString("publisher");
+				Date publish_date = rs.getDate("publish_date");
+				int price = rs.getInt("price");	
+				int quantity = rs.getInt("quantity");
+				
+				Book st = new Book(name, publisher, publish_date, price, quantity);
+				sft.add(st);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String column[] = {"Name", "Publisher", "Published Date", "Price", "Quantity"};		
+		Object data[][] = new Object[sft.size()][column.length]; 
+
+		for(int i=0; i<sft.size(); i++) {
+			data[i][0] = sft.get(i).name;
+			data[i][1] = sft.get(i).publisher;
+			data[i][2] = sft.get(i).publish_date;
+			data[i][3] = sft.get(i).price;
+			data[i][4] = sft.get(i).quantity;
+		}
+			
+		table = new JTable(data, column);
+		table.setBounds(50, 180, 900, 450);
+		JScrollPane sp = new JScrollPane(table);
+		
+		// delete functionality
+		deleteBtn.addActionListener(e->{
+			
+            int row = table.getSelectedRow();
+            if(row>=0) {
+                
+            	TableModel model = table.getModel();
+            	
+            	String name = (String) model.getValueAt(row, 0);
+                System.out.println(name);
+            	PreparedStatement stmt;
+            	String dquery = "delete from Book where name=?";
+            	try {
+					stmt = (PreparedStatement) conn.connection().prepareStatement(dquery);
+					stmt.setString(1, name);
+					stmt.executeUpdate();
+					frame.dispose();
+					new Home();
+	            	JOptionPane.showMessageDialog(frame, "Deleted Book");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+            	
+                   
+            }else {
+                JOptionPane.showMessageDialog(frame, "Please select row");
+            }           
+        });
+		
+		//edit functionality
+		editBtn.addActionListener(e -> {
+			
+			int row = table.getSelectedRow();
+			if(row >= 0) {
+				TableModel model = table.getModel();
+            	
+            	String name = (String) model.getValueAt(row, 0);
+            	String date = dateinp.getText();
+    			String publisher = publisherinp.getText();
+    			int price = Integer.parseInt(priceinp.getText());
+    			int quantity = Integer.parseInt(quantityinp.getText());
+    			
+    			nameinp.setText(name);
+            	            	
+            	PreparedStatement stmt;
+            	String update_query = "update Book set publisher=?, publish_date=?, price=?, quantity=? where name=?";
+            	try {
+					stmt = (PreparedStatement) conn.connection().prepareStatement(update_query);
+					stmt.setString(1, publisher);
+					stmt.setString(2, date);
+					stmt.setInt(3, price);
+					stmt.setInt(4, quantity);
+					stmt.setString(5, name);
+					stmt.executeUpdate();
+					frame.dispose();
+					new Home();
+	            	JOptionPane.showMessageDialog(frame, "Deleted Book");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(frame, "Please select row");
+			}
+			
+		});
+		
+		frame.add(sp);
+		frame.add(table);
+		frame.add(title);
+		frame.add(namelbl);
+		frame.add(nameinp);
+		frame.add(publisherlbl);
+		frame.add(publisherinp);
+		frame.add(datelbl);
+		frame.add(dateinp);
+		frame.add(quantitylbl);
+		frame.add(quantityinp);
+		frame.add(pricelbl);
+		frame.add(priceinp);
+		frame.add(searchInput);
+		frame.add(searchBtn);
+		frame.add(addBtn);
+		frame.add(editBtn);
+		frame.add(deleteBtn);
+		
+		frame.setSize(1400, 800);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+	}
+	
+}

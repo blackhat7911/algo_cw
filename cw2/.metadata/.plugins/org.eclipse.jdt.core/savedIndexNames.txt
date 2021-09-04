@@ -1,0 +1,18 @@
+INDEX VERSION 1.131+/home/bishal/algo-and-data-structure-2.0/.metadata/.plugins/org.eclipse.jdt.core
+3788132733.index
+1590307938.index
+781080019.index
+102559490.index
+1575286496.index
+628121513.index
+2230915656.index
+3019481314.index
+3940642076.index
+2268218553.index
+4061785843.index
+3423407858.index
+3331941294.index
+646308851.index
+2521478517.index
+992848828.index
+2532151691.index

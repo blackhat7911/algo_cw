@@ -1,0 +1,23 @@
+package cw2;
+
+import javax.swing.JFrame;
+
+public class SoldBook {
+	
+	public static void main(String[] args) {
+		new SoldBook();
+	}
+	
+	SoldBook(){
+		
+		JFrame frame = new JFrame();
+		
+		
+		
+		frame.setSize(800, 600);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+	}
+	
+}

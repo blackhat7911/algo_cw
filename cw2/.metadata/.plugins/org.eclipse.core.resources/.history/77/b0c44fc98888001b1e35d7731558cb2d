@@ -1,0 +1,91 @@
+package cw2;
+
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class BookForm {
+	
+	public static void main(String[] args) {
+		new BookForm();
+	}
+	
+	BookForm(){
+		
+		JFrame frame = new JFrame();
+		
+		JLabel title, bookid, bookname, publisher, pub_date, price;
+		JTextField idInp, nameInp, pubInp, dateInp, priceInp;
+		JButton addBtn, cancelBtn;
+		
+		title = new JLabel("BookStore Management System", JLabel.CENTER);
+		title.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		title.setBounds(0, 0, 1200, 40);
+		
+		bookid = new JLabel("Book ID");
+		title.setFont(new Font("Poppins", Font.BOLD, 16));
+		bookid.setBounds(450, 150, 100, 30);
+		idInp = new JTextField();
+		idInp.setBounds(600, 150, 200, 30);
+		
+		bookname = new JLabel("Book Name");
+		title.setFont(new Font("Poppins", Font.BOLD, 16));
+		bookname.setBounds(450, 200, 100, 30);
+		nameInp = new JTextField();
+		nameInp.setBounds(600, 200, 200, 30);
+		
+		publisher = new JLabel("Publisher");
+		publisher.setFont(new Font("Poppins", Font.BOLD, 16));
+		publisher.setBounds(450, 250, 100, 30);
+		pubInp = new JTextField();
+		pubInp.setBounds(600, 250, 200, 30);
+		
+		pub_date = new JLabel("Date");
+		pub_date.setFont(new Font("Poppins", Font.BOLD, 16));
+		pub_date.setBounds(450, 300, 100, 30);
+		dateInp = new JTextField();
+		dateInp.setBounds(600, 300, 200, 30);
+		
+		price = new JLabel("Price");
+		price.setFont(new Font("Poppins", Font.BOLD, 16));
+		price.setBounds(450, 350, 100, 30);
+		priceInp = new JTextField();
+		priceInp.setBounds(600, 350, 200, 30);
+		
+		cancelBtn = new JButton("Cancel");
+		cancelBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		cancelBtn.setBackground(Color.RED);
+		cancelBtn.setForeground(Color.WHITE);
+		cancelBtn.setBounds(450, 400, 100, 30);
+		
+		addBtn = new JButton("Save");
+		addBtn.setFont(new Font("Poppins", Font.BOLD, 16));
+		addBtn.setBackground(Color.GREEN);
+		addBtn.setForeground(Color.WHITE);
+		addBtn.setBounds(700, 400, 100, 30);
+		
+		frame.add(title);
+		frame.add(bookid);
+		frame.add(idInp);
+		frame.add(bookname);
+		frame.add(nameInp);
+		frame.add(publisher);
+		frame.add(pubInp);
+		frame.add(pub_date);
+		frame.add(dateInp);
+		frame.add(price);
+		frame.add(priceInp);
+		frame.add(addBtn);
+		frame.add(cancelBtn);
+		
+		frame.setSize(1400, 800);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+	}
+	
+}

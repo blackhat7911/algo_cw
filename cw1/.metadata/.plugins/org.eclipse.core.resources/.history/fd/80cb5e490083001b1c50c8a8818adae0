@@ -1,0 +1,47 @@
+package week7;
+
+import java.util.Stack;
+
+public class JarvisAlgo {
+	
+	// finding orientation
+	int orientation(Points p, Points q, Points r) {
+		int val = ((q.y - p.y) * (r.x - q.x)) - ((q.x - p.x) * (r.y - q.y));
+		return val;
+	}
+	
+	// find convex hull of set of num of points
+	void convexHull(Points points[], int num) {
+		
+		Stack<Points> stack = new Stack<Points>();
+		
+		int left = 0;
+		// find left most point
+		for (int i=0; i<num; i++) {
+			if(points[i].x < points[left].x) {
+				left = i;
+			}
+		}
+		
+		int p = left;
+		do {
+			stack.add(points[p]);
+			int q = (p+1) % num;
+			for(int r=0; r<num; r++) {
+				if (orientation(points[p], points[q], points[r]) > 0) {
+					q = r;
+				}
+			}
+			p = q;
+		} 
+		while(p != left);
+		
+		stack.add(points[p]);
+		
+		for (Points p : stack) {
+			System.out.println("("+ p.x + "," + p.y + ")");
+		}
+		
+	}
+	
+}

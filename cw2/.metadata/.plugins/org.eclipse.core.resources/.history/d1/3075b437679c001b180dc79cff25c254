@@ -1,0 +1,39 @@
+package cw2;
+
+class BubbleSort{
+	static void bubbleSort(int arr[][])
+    {
+        int i, j, temp;
+        boolean swapped;
+        for (i = 0; i < arr.length - 1; i++) 
+        {
+            swapped = false;
+            for (j = 0; j < arr.length - i - 1; j++) 
+            {
+            	for (int k = 0; k < arr[i].length - j; k++) { 
+                    if (arr[i][k] > arr[i][k + 1]) { 
+  
+                        // swapping of elements 
+                        int t = arr[i][k]; 
+                        arr[i][k] = arr[i][k + 1]; 
+                        arr[i][k + 1] = t; 
+                    } 
+                } 
+            }
+  
+            // IF no two elements were 
+            // swapped by inner loop, then break
+            if (swapped == false)
+                break;
+        }
+    }  
+	
+	public static void main(String[] args) {
+		int m[][] = { { 9, 8, 7, 1 }, 
+                { 7, 3, 0, 2 }, 
+                { 9, 5, 3, 2 }, 
+                { 6, 3, 1, 2 } }; 
+		bubbleSort(m);
+	}
+	
+}
